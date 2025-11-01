@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+
+/* === DESIGN TOKENS === */
+:root{
+  --bg-1: #fff7ed;       /* pale peach */
+  --accent: #ff7a59;     /* coral/orange */
+  --accent-2: #ff4d8f;   /* pink-ish */
+  --muted: #6b7280;      /* gray-500 */
+  --card-grad-1: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.9));
+  --card-grad-2: linear-gradient(90deg, rgba(255,122,89,0.06), rgba(255,77,143,0.03));
+}
+
+/* === PAGE BACKGROUND === */
+body{
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 400px at 10% 8%, rgba(255,122,89,0.06), transparent 20%),
+    radial-gradient(800px 350px at 92% 92%, rgba(79,70,229,0.03), transparent 10%),
+    var(--bg-1);
+  color: #0f172a;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* === HEADER === */
+.header-gradient{
+  background: linear-gradient(90deg, rgba(255,122,89,0.06), rgba(255,77,143,0.03));
+  border-radius: 14px;
+  padding: 18px;
+}
+
+/* === SEARCH === */
+.search-input {
+  border-radius: 9999px;
+  background: white;
+  border: 1px solid rgba(226,232,240,1);
+  box-shadow: 0 10px 30px rgba(15,23,42,0.04);
+}
+.search-button {
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  color: white;
+  border-radius: 9999px;
+  padding-left: 18px;
+  padding-right: 18px;
+  box-shadow: 0 8px 24px rgba(255,77,143,0.12);
+}
+
+/* === PILL BUTTONS === */
+.pill {
+  border-radius: 9999px;
+  padding: 8px 12px;
+  border: 1px solid rgba(226,232,240,1);
+  background: white;
+  box-shadow: 0 6px 20px rgba(15,23,42,0.04);
+}
+.pill.accent {
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  color: white;
+  border: none;
+}
+
+/* === CARDS === */
+.card-hover {
+  transition: transform .18s ease, box-shadow .18s ease;
+  border-radius: 14px;
+}
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+}
+.recipe-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.92));
+  border: 1px solid rgba(226,232,240,1);
+}
+
+/* small inner accent strip */
+.card-accent {
+  height: 6px;
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  margin-bottom: 8px;
+}
+
+/* popularity badge */
+.pop-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  color: white;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  box-shadow: 0 8px 20px rgba(255,77,143,0.12);
+}
+
+/* rating stars */
+.star {
+  font-size: 14px;
+  color: #f59e0b;
+}
+
+/* heart favorite */
+.heart-btn {
+  background: rgba(255,77,143,0.06);
+  border: 1px solid rgba(255,77,143,0.12);
+  color: #ef4444;
+  padding: 6px;
+  border-radius: 10px;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Modal glass */
+.backdrop-blur { backdrop-filter: blur(6px) saturate(1.05); }
+.modal-inner { background: rgba(255,255,255,0.92); border-radius: 14px; border: 1px solid rgba(226,232,240,1); }
+
+/* Favorites grid tweaks */
+.favs-grid .recipe-card { height: 180px; }
+
+/* Footer (keeps earlier gradient) */
+.app-footer {
+  margin-top: 48px;
+  padding: 34px 18px;
+  border-radius: 12px;
+  color: white;
+  background: linear-gradient(90deg,#ff7a59,#ff4d8f);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-left h4 { font-weight: 700; font-size: 18px; margin-bottom: 6px; }
+.footer-links a { color: rgba(255,255,255,0.95); margin-right: 12px; text-decoration: none; font-size: 14px; }
+.footer-right { text-align: right; font-size: 13px; opacity: 0.95; }
+
+/* responsive */
+@media (max-width: 768px) {
+  .app-footer { flex-direction: column; text-align: center; gap: 8px; }
+  .pop-badge { top: 8px; right: 8px; padding: 5px 7px; }
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* ===== Floating leaves / particles (falling + swirl) ===== */
+
+/* container children base */
+.floating-particle {
+  position: absolute;
+  left: var(--startX, 10%);
+  top: var(--startY, -15%);
+  transform: translate3d(0,0,0) scale(var(--scale, 1));
+  will-change: transform, opacity;
+  z-index: 2;
+  animation:
+    float-fall var(--dur, 20s) linear var(--delay, 0s) infinite,
+    float-sway calc(var(--dur, 20s) / 3) ease-in-out var(--delay, 0s) infinite,
+    float-tilt calc(var(--dur, 20s) / 6) ease-in-out var(--delay, 0s) infinite;
+  opacity: 0.98;
+  pointer-events: none;
+}
+
+/* a little base size control for contained svgs */
+.floating-svg {
+  display: block;
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.12));
+}
+
+/* main downward diagonal drift: translate Y from -20% to 120% and X shift slightly right */
+@keyframes float-fall {
+  0%   { transform: translate3d(0,  -6vh, 0) scale(var(--scale,1)); opacity: 0; }
+  6%   { opacity: 1; }
+  50%  { transform: translate3d(10vw, 45vh, 0) scale(var(--scale,1)); opacity: 0.95; }
+  90%  { opacity: 0.8; }
+  100% { transform: translate3d(20vw, 120vh, 0) scale(calc(var(--scale,1) * 0.95)); opacity: 0; }
+}
+
+/* gentle horizontal sway / float */
+@keyframes float-sway {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(12px); }
+  100% { transform: translateX(0); }
+}
+
+/* gentle rotation / tilt */
+@keyframes float-tilt {
+  0%   { transform: rotate(-6deg); }
+  50%  { transform: rotate(8deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+/* combine transforms properly by nesting wrapper transforms in CSS:
+   we set sway/tilt via pseudo transforms inside nested element to avoid clobbering
+   (modern browsers will compose these animations; this is acceptable for our small set) */
+
+/* Slight responsiveness: smaller particles on narrow screens */
+@media (max-width: 768px) {
+  .floating-svg { width: 48px; height: 48px; }
+  .floating-particle { animation-duration: calc(var(--dur, 20s) * 0.9); }
+}
+
+/* Optional: make hero content sit above particles */
+.hero-content { position: relative; z-index: 10; }
+
+/* quick helpers for subtle blur if you want */
+.hero-particles-soften { filter: blur(0.0px); }
+
+/* End Floating leaves CSS */
+
+
+html, body {
+  background-color: #0b0c1a;
+  scroll-behavior: smooth;
+}
+button {
+  transition: all 0.3s ease;
+}
+button:hover {
+  transform: translateY(-1px);
+}
+
+
+/* === Ambient lights and motion-friendly helpers === */
+:root {
+  --accent-from: #ff7b00;
+  --accent-to: #ff3d7f;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Ambient lights */
+.ambient {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(100px);
+  opacity: 0.65;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+/* Search bar glow */
+.search-bar {
+  transition: box-shadow .28s ease, transform .18s ease;
+  will-change: box-shadow, transform;
+}
+.search-bar:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 95, 68, 0.16), 0 6px 18px rgba(255, 50, 120, 0.08);
+}
+
+/* Button micro-interaction */
+.btn-cta {
+  background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  color: white;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  display: inline-block;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.btn-cta:active { transform: translateY(1px) scale(0.995); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #ffd6c2;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  transition: background .18s ease, transform .12s ease;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.02); transform: translateY(-2px); }
+
+/* Card hover / shine */
+.card-ux {
+  transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease;
+  will-change: transform, box-shadow;
+  transform-origin: center;
+}
+.card-ux:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(20,10,40,0.35);
+}
+.card-ux .shine {
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 200%;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.0) 40%);
+  transform: rotate(-20deg) translateX(-100%);
+  transition: transform .9s ease;
+  opacity: 0.6;
+}
+.card-ux:hover .shine { transform: rotate(-20deg) translateX(0%); }
+
+/* Staggered grid placement helper */
+.grid-stagger { perspective: 1200px; }
+
+/* subtle footer glass */
+.app-footer {
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* smaller responsive tweaks */
+@media (max-width: 768px) {
+  .card-ux:hover { transform: none; box-shadow: none; }
+}
+
+/* subtle hover for ingredient rows */
+.recipe-ingredients li:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+  transition: all .18s ease;
+}
